@@ -1,17 +1,11 @@
 extends layout
 
 block content
-    h1(style='color: darkgreen') Add Recipe 
+    h1(style='color: red') Edit 
+        span(style='color:grey') #{recipe.name} 
+
     
-    if errors 
-        each error in errors 
-            p(style='color: red') #{error.msg}
-    
-    form(method='POST',action='/recipe/add-recipe')
-        lable Name:  
-        input(name='name', type='text')
-        br
-        br
+    form(method='POST',action='/recipe/single/edit/'+recipe.id)
         lable Description:  
         textarea(name="description", cols="30", rows="5")
         br
@@ -28,5 +22,6 @@ block content
         textarea(name="steps", cols="30", rows="5")
         br
         br
-        input(type='submit',value='submit')
-        
+        input(type='submit',value='Modify')
+
+       

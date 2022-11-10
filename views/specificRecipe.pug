@@ -21,3 +21,9 @@ block content
       li #{step}
       br
     hr
+    a.btn.btn-default(href='/recipe/single/edit/'+ recipe._id) Edit Recipe
+    br
+    br
+    button.btn.delete-recipe(href='#', data-id=recipe._id, type='button') Delete Recipe
+    p.delete(style='color: red')
+       

@@ -10,6 +10,17 @@ recipeR.route('/single/:id')
             res.render('specificRecipe', {recipe, title: recipe.name})
         })
     })
+    .delete(function(req,res){
+        let deleteFilter = {_id:req.params.id}
+
+        Recipe.deleteOne(deleteFilter, function(error){
+            if(error){
+                console.log("Delete recipe failed")
+            }else{
+                res.redirect("/")
+            }
+        })
+    })
 
 recipeR.route('/add-recipe')
     .get(function (req,res){
@@ -29,9 +40,9 @@ recipeR.route('/add-recipe')
             recipe.description = req.body.description;
             recipe.difficulty = req.body.difficulty;
             const ingredientsArr = req.body.ingredients.split(/[.;\n]/)
-            recipe.ingredients = ingredientsArr.slice(0,ingredientsArr.length-1);
+            recipe.ingredients = ingredientsArr.filter(v=> v!="");
             const stepsArr = req.body.steps.split(/[\n.;]/)
-            recipe.steps = stepsArr.slice(0,stepsArr.length-1);
+            recipe.steps = stepsArr.filter(v=>v);
 
             recipe.save(function(err){
                 if(err){
@@ -44,7 +55,46 @@ recipeR.route('/add-recipe')
         }else{
             res.render('addRecipe',{errors:errors.array(),title: 'Add Recipe'})
         }
+    })
 
+recipeR.route('/single/edit/:id')
+    .get(function(req,res){
+        Recipe.findById(req.params.id, function(err, recipe){
+            res.render('editRecipe', {title: "Modify Recipe",recipe})
+        })
+    })
+    .post(function(req,res){
+        var updates = {};
+        Recipe.findById(req.params.id, function(err,recipe){
+            updates = recipe;
+        })
+        if(req.body.description!== ""){
+            updates.description = req.body.description;
+        }
+        if(req.body.difficulty!== ""){
+            updates.difficulty = req.body.difficulty;
+        }
+        if(req.body.ingredients!== ""){
+            const ingredientsArr = req.body.ingredients.split(/[.;\n]/)
+            updates.ingredients = ingredientsArr.filter(v=>v!="");
+        }
+        if(req.body.steps!== ""){
+            const stepsArr = req.body.steps.split(/[\n.;]/)
+            updates.steps = stepsArr.filter(v=>v);
+        }
+
+        
+            
+        
+        let filter = {_id:req.params.id}
+        Recipe.updateOne(filter, updates, function(err, updateDoc){
+            if(err){
+                console.log(err)
+            }else{
+                console.log(updateDoc);
+                res.redirect('/');
+            }
+        })
     })
 
 module.exports = recipeR;
