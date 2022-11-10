@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 const PORT = 8000;
 var app = express();
+var recipeR = require('./routes/recipe_router');
 
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/RecipeStore');
@@ -12,7 +13,7 @@ db.once('open', function(){
 }).on('error', function(err){
   console.log('Error connecting to mongodb');
 })
-const Recipe = require('./models/recipeSchema');
+const recipe = require('./models/recipeSchema');
 
 
 // view engine setup
@@ -23,8 +24,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use("/recipe", recipeR);
+
 app.get('/', function(req, res){
-  Recipe.find({},function(err,recipes){
+  recipe.find({},function(err,recipes){
     if(err){
       console.log("error!")
     }else{

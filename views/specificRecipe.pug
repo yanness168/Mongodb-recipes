@@ -1,12 +1,8 @@
 extends layout
 
 block content
-  h1(style='color: darkgreen') Recipe World
-  each recipe in recipes
-    lable(style='font-size:18px')
-      b name: 
-    a(href="/recipe/single/"+recipe.id) #{recipe.name}
-    p(style="line-height: 2")
+    h1(style='color: darkgreen') #{recipe.name}
+    p 
       b Description: 
       | #{recipe.description}
     p 
@@ -16,9 +12,8 @@ block content
       b Ingredients: 
     ul 
     each ingredient in recipe.ingredients
-      if !ingredient.isEmpty
-        li #{ingredient}
-        br
+      li #{ingredient}
+      br
     p 
       b Steps: 
     ul 

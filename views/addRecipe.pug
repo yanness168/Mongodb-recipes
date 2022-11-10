@@ -1,0 +1,33 @@
+extends layout
+
+block content
+    h1(style='color: darkgreen') Add Recipe 
+    
+    if errors 
+        each error in errors 
+            p(style='color: red') #{error.msg}
+    
+    form(method='POST',action='/recipe/add-recipe')
+        lable Name:  
+        input(name='name', type='text')
+        br
+        br
+        lable Description:  
+        textarea(name="description", cols="30", rows="5")
+        br
+        br
+        lable Difficulty: 
+        input(name='difficulty', type='number',step='.01')
+        br
+        br
+        lable Ingredients: 
+        textarea(name="ingredients", cols="30", rows="5")
+        br
+        br
+        lable Steps: 
+        textarea(name="steps", cols="30", rows="5")
+        br
+        br
+        input(type='submit',value='submit')
+
+       
