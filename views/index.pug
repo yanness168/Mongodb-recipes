@@ -1,0 +1,27 @@
+extends layout
+
+block content
+  h1(style='color: darkgreen') Recipe World
+  each recipe in recipes
+    lable(style='font-size:18px')
+      b name: 
+    a(href="/recipes/single/"+recipe.id) #{recipe.name}
+    p 
+      b Description: 
+      | #{recipe.description}
+    p 
+      b Difficulty: 
+      | #{recipe.difficulty}
+    p 
+      b Ingredients: 
+    ul 
+    each ingredient in recipe.ingredients
+      li #{ingredient}
+      br
+    p 
+      b Steps: 
+    ul 
+    each step in recipe.steps
+      li #{step}
+      br
+    hr
