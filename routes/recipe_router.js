@@ -17,7 +17,7 @@ recipeR.route('/single/:id')
             if(error){
                 console.log("Delete recipe failed")
             }else{
-                res.redirect("/")
+                res.send('Successfully!')
             }
         })
     })

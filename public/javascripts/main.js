@@ -7,13 +7,14 @@ $(document).ready(function() {
             // the URL of the data that to delete
             url: "/recipe/single/"+id,
             success: function(res){
-                alert("Deleting Recipe");
-                //window.location.href="http://localhost:8000";
-                window.location.replace("/");
-            },
-            error: function(err){
-                $( ".delete" ).append( "Cannot redirect...But deleted successfully" );
+                alert("deleting");
+                //$( ".delete" ).append( "Deleted!!!" );
+                window.location.href="/";
+                //window.location.replace("/");
+            },error: function(err){
+                $( ".delete" ).append( "Cannot redirect..." );
             }
         })
     })
 })
+
