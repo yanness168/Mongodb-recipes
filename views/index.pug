@@ -1,6 +1,8 @@
 extends layout
 
 block content
+  if user 
+    h3 Welcome back #{user.name}
   h1(style='color: darkgreen') Recipe World
   each recipe in recipes
     lable(style='font-size:18px')

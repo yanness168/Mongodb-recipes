@@ -1,32 +1,60 @@
-var createError = require('http-errors');
+const PORT = 8080;
 var express = require('express');
 var path = require('path');
-const PORT = 8080;
-var app = express();
-var recipeR = require('./routes/recipe_router');
-
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/RecipeStore');
+var passport = require('passport');
+var session = require('express-session');
+var config = require('./config/database')
+var recipeR = require('./routes/recipe_router');
+var userR = require('./routes/user_router');
+
+mongoose.connect(config.database);
 var db = mongoose.connection;
+
 db.once('open', function(){
   console.log('Connected to mongodb');
 }).on('error', function(err){
   console.log('Error connecting to mongodb');
 })
-const recipe = require('./models/recipeSchema');
 
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+var app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use("/recipe", recipeR);
+//Session id saved in cookie on the client and data saved on server
+app.use(session({
+  secret: "secret",
+  resave: false,
+  saveUninitialized: false,
+  cookie: {},
+}));
 
-app.get('/', function(req, res){
+require("./config/passport")(passport)
+//The initialize() method initializes the authentication module across our app.
+app.use(passport.initialize());
+//The session() middleware alters the request object and is able to attach a ‘user’ value that can be retrieved from the session id.
+app.use(passport.session());
+
+
+var recipe = require('./models/recipeSchema');
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
+
+// Wildcard route to allow user to be
+// used in templates
+app.get("*", function(req, res, next){
+  res.locals.user = req.user || null;
+  next();
+})
+
+app.use("/recipe", recipeR);
+app.use("/user", userR);
+
+
+app.use('/', function(req, res){
   recipe.find({},function(err,recipes){
     if(err){
       console.log("error!")

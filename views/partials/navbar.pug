@@ -4,3 +4,14 @@ nav
     br
     a(href='/recipe/add-recipe') Add Recipe
     br
+    br
+    if user
+        a(href="/user/logout") Logout
+    else
+        a(href='/user/register') Register
+        br
+        br
+        a(href='/user/login') Login
+        br
+        br
+

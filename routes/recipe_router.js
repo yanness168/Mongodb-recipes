@@ -82,9 +82,6 @@ recipeR.route('/single/edit/:id')
             const stepsArr = req.body.steps.split(/[\n.;]/)
             updates.steps = stepsArr.filter(v=>v);
         }
-
-        
-            
         
         let filter = {_id:req.params.id}
         Recipe.updateOne(filter, updates, function(err, updateDoc){
